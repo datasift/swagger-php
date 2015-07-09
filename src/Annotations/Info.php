@@ -50,6 +50,12 @@ class Info extends AbstractAnnotation
      */
     public $version;
 
+    /**
+     * Provides the version of the application API (not to be confused by the specification version).
+     * @var Version[]
+     */
+    public $_versions;
+
     /** @inheritdoc */
     public static $_required = ['title', 'version'];
 
@@ -63,7 +69,8 @@ class Info extends AbstractAnnotation
     /** @inheritdoc */
     public static $_nested = [
         'Swagger\Annotations\Contact' => 'contact',
-        'Swagger\Annotations\License' => 'license'
+        'Swagger\Annotations\License' => 'license',
+        'Swagger\Annotations\Version' => ['_versions', '_version']
     ];
 
     /** @inheritdoc */

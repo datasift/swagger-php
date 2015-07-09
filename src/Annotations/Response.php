@@ -46,6 +46,12 @@ class Response extends AbstractAnnotation
     public $headers;
 
     /**
+     * A list of the versions supported.
+     * @var Version[]
+     */
+    public $_versions;
+
+    /**
      * An example of the response message.
      * @var array
      */
@@ -62,7 +68,8 @@ class Response extends AbstractAnnotation
     /** @inheritdoc */
     public static $_nested = [
         'Swagger\Annotations\Schema' => 'schema',
-        'Swagger\Annotations\Header' => ['headers', 'header']
+        'Swagger\Annotations\Header' => ['headers', 'header'],
+        'Swagger\Annotations\Version' => ['_versions', '_version']
     ];
 
     /** @inheritdoc */

@@ -5,6 +5,7 @@ error_reporting(E_ALL);
 $options = array(
     'output' => 'swagger.json',
     'stdout' => false,
+    'versioning' => false,
     'exclude' => null,
     'bootstrap' => false,
     'help' => false,
@@ -85,6 +86,8 @@ usage: swagger [/path/to/project] [--output ./swagger.json] ...
   --stdout          Write to the standard output.
   --exclude (-e)    Exclude path(s).
                     ex: --exclude vendor,library/Zend
+  --versioning      Turn on api versioning, if configured this will output a
+                    number of file which correspond to the specific version.
   --bootstrap (-b)  Bootstrap a php file for defining constants, etc.
                     ex: --bootstrap config/constants.php
   --version (-v)    Display Swagger-PHP version.
@@ -148,29 +151,49 @@ set_exception_handler(function ($exception) {
 
 $exclude = $options['exclude'] ? explode(',', $options['exclude']) : null;
 
-$swagger = Swagger\scan($paths, ['exclude' => $exclude]);
-$methods = ['get', 'put', 'post', 'delete', 'options', 'head', 'patch'];
-$counter = 0;
+$swagger = Swagger\scan($paths, ['exclude' => $exclude, 'versioning' => $options['versioning']]);
 
-// Output report
-foreach ($swagger->paths as $path) {
-    foreach ($path as $method => $operation) {
-        if ($operation !== null && in_array($method, $methods)) {
-            error_log(str_pad($method, 7, ' ', STR_PAD_LEFT) . ' ' . $path->path);
-            $counter++;
+if (true === $options['versioning']) {
+    foreach ($swagger as $tag => $version) {
+        saveVersion($tag, $version, $options);
+    }
+
+    error_log('---------------------'.  str_repeat('-', strlen(count($swagger))));
+    error_log('(' . count($swagger).') Versions Generated');
+    error_log('---------------------'.  str_repeat('-', strlen(count($swagger))));
+} else {
+    saveVersion('', $swagger, $options);
+}
+
+function saveVersion($tag, $version, $options)
+{
+    $methods = ['get', 'put', 'post', 'delete', 'options', 'head', 'patch'];
+    $counter = 0;
+
+    // Output report
+    foreach ($version->paths as $path) {
+        foreach ($path as $method => $operation) {
+            if ($operation !== null && in_array($method, $methods)) {
+                error_log(str_pad($method, 7, ' ', STR_PAD_LEFT) . ' ' . $path->path);
+                $counter++;
+            }
         }
     }
-}
-error_log('----------------------'.  str_repeat('-', strlen($counter)));
-error_log($counter.' operations documented');
-error_log('----------------------'.  str_repeat('-', strlen($counter)));
-if ($options['stdout']) {
-    echo $swagger;
-} else {
-    if (is_dir($options['output'])) {
-        $options['output'] .= '/swagger.json';
+    error_log('----------------------'.  str_repeat('-', strlen($counter)));
+    error_log($counter.' operations documented');
+    error_log('----------------------'.  str_repeat('-', strlen($counter)));
+    if ($options['stdout']) {
+        echo $version;
+    } else {
+        if (is_dir($options['output'])) {
+            $options['output'] .= '/' . $tag . '-swagger.json';
+        }
+
+        // Use tag identifier to replace output
+        $options['output'] = str_replace('{tag}', $tag, $options['output']);
+
+        $version->saveAs($options['output']);
+        error_log('Written to '.realpath($options['output']));
     }
-    $swagger->saveAs($options['output']);
-    error_log('Written to '.realpath($options['output']));
+    error_log('');
 }
-error_log('');
