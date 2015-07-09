@@ -5,6 +5,7 @@ error_reporting(E_ALL);
 $options = array(
     'output' => 'swagger.json',
     'stdout' => false,
+    'versioning' => false,
     'exclude' => null,
     'bootstrap' => false,
     'help' => false,
@@ -85,6 +86,8 @@ usage: swagger [/path/to/project] [--output ./swagger.json] ...
   --stdout          Write to the standard output.
   --exclude (-e)    Exclude path(s).
                     ex: --exclude vendor,library/Zend
+  --versioning      Turn on api versioning, if configured this will output a
+                    number of file which correspond to the specific version.
   --bootstrap (-b)  Bootstrap a php file for defining constants, etc.
                     ex: --bootstrap config/constants.php
   --version (-v)    Display Swagger-PHP version.
