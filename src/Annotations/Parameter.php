@@ -78,6 +78,12 @@ class Parameter extends AbstractAnnotation
     public $items;
 
     /**
+     * A list of the versions supported.
+     * @var Version[]
+     */
+    public $_versions;
+
+    /**
      * @var string Determines the format of the array if type array is used. Possible values are: csv - comma separated values foo,bar. ssv - space separated values foo bar. tsv - tab separated values foo\tbar. pipes - pipe separated values foo|bar. multi - corresponds to multiple parameter instances instead of multiple values for a single instance foo=bar&foo=baz. This is valid only for parameters in "query" or "formData". Default value is csv.
      */
     public $collectionFormat;
@@ -187,7 +193,8 @@ class Parameter extends AbstractAnnotation
     /** @inheritdoc */
     public static $_nested = [
         'Swagger\Annotations\Items' => 'items',
-        'Swagger\Annotations\Schema' => 'schema'
+        'Swagger\Annotations\Schema' => 'schema',
+        'Swagger\Annotations\Version' => ['_versions', '_version']
     ];
 
     /** @inheritdoc */

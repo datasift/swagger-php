@@ -104,6 +104,12 @@ abstract class Operation extends AbstractAnnotation
     public $schemes;
 
     /**
+     * The version supported.
+     * @var Version[]
+     */
+    public $_versions;
+
+    /**
      * Declares this operation to be deprecated.
      * Usage of the declared operation should be refrained. Default value is false.
      * @var boolean
@@ -139,7 +145,8 @@ abstract class Operation extends AbstractAnnotation
     public static $_nested = [
         'Swagger\Annotations\Parameter' => ['parameters'],
         'Swagger\Annotations\Response' => ['responses', 'response'],
-        'Swagger\Annotations\ExternalDocumentation' => 'externalDocs'
+        'Swagger\Annotations\ExternalDocumentation' => 'externalDocs',
+        'Swagger\Annotations\Version' => ['_versions', '_version']
     ];
 
     /** @inheritdoc */
