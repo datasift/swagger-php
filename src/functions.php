@@ -43,5 +43,7 @@ function scan($directory, $options = array())
     $analysis->process($processors);
     // Validation (Generate notices & warnings)
     $analysis->validate();
+
+    if (@$options['versioning']) return Versioning::process($analysis->swagger);
     return $analysis->swagger;
 }
