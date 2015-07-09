@@ -18,10 +18,26 @@ class Property extends Schema
      */
     public $property;
 
+    /**
+     * A list of the versions supported.
+     * @var Version[]
+     */
+    public $_versions;
+
     /** @inheritdoc */
     public static $_parents = [
         'Swagger\Annotations\Definition',
         'Swagger\Annotations\Schema',
         'Swagger\Annotations\Property',
+    ];
+
+    /** @inheritdoc */
+    public static $_nested = [
+        'Swagger\Annotations\Items' => 'items',
+        'Swagger\Annotations\Property' => ['properties', 'property'],
+        'Swagger\Annotations\ExternalDocumentation' => 'externalDocs',
+        'Swagger\Annotations\Xml' => 'xml',
+        'Swagger\Annotations\Definition' => ['definitions', 'definition'],
+        'Swagger\Annotations\Version' => ['_versions', '_version']
     ];
 }

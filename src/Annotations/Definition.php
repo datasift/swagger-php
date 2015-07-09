@@ -18,6 +18,12 @@ class Definition extends Schema
      */
     public $definition;
 
+    /**
+     * A list of the versions supported.
+     * @var Version[]
+     */
+    public $_versions;
+
     /** @inheritdoc */
     public static $_types = [
         'definition' => 'string'
@@ -29,5 +35,15 @@ class Definition extends Schema
         'Swagger\Annotations\Schema',
         'Swagger\Annotations\Definition',
         'Swagger\Annotations\Property',
+    ];
+
+    /** @inheritdoc */
+    public static $_nested = [
+        'Swagger\Annotations\Items' => 'items',
+        'Swagger\Annotations\Property' => ['properties', 'property'],
+        'Swagger\Annotations\ExternalDocumentation' => 'externalDocs',
+        'Swagger\Annotations\Xml' => 'xml',
+        'Swagger\Annotations\Definition' => ['definitions', 'definition'],
+        'Swagger\Annotations\Version' => ['_versions', '_version']
     ];
 }
