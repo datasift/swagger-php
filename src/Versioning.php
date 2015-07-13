@@ -36,7 +36,7 @@ class Versioning
 
             // Base path prefix
             if (isset($version->path) && $version->path != '') {
-                $temp->basePath .= $version->path . "/";
+                $temp->basePath .= $version->path;
             }
 
             // Version Number
